@@ -1,31 +1,39 @@
 #!/bin/bash 
 
+set -euo pipefail
+
 source ../zero_shot_config.sh
-source activate proteingym
+source activate proteingym_env
 
-#export Progen2_model_name_or_path="path to progen2 small model"
-#export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/small"
+NUM_DATASETS=$(($(wc -l < $clinical_reference_file_path_subs) - 1))
 
-#export Progen2_model_name_or_path="path to progen2 medium model"
-#export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/medium"
+export Progen2_model_name_or_path="$HOME/ProteinGym/checkpoints/progen2-small"
+export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/small"
 
-export Progen2_model_name_or_path="path to progen2 base model"
-export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/base"
+GPUS=(1 2 3 4 5)
+NUM_GPUS=${#GPUS[@]}
 
-#export Progen2_model_name_or_path="path to progen2 large model"
-#export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/large"
+run_worker() {
+    local worker_id=$1
+    local gpu_id=$2
 
-#export Progen2_model_name_or_path="path to progen2 xlarge model"
-#export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/xlarge"
+    for ((i=worker_id; i<NUM_DATASETS; i+=NUM_GPUS)); do
+        echo "[GPU ${gpu_id}] Running clinical index $i"
 
-#export Progen2_model_name_or_path="path to progen2 oas model"
-#export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/oas"
+        CUDA_VISIBLE_DEVICES=${gpu_id} python ../../proteingym/baselines/progen2/compute_fitness.py \
+            --Progen2_model_name_or_path "${Progen2_model_name_or_path}" \
+            --DMS_reference_file_path "${clinical_reference_file_path_subs}" \
+            --DMS_data_folder "${clinical_data_folder_subs}" \
+            --DMS_index "$i" \
+            --output_scores_folder "${output_scores_folder}"
+    done
+}
 
-export DMS_index="variant index to run (e.g. 1,2,...2525)"
+for worker_id in "${!GPUS[@]}"; do
+    gpu_id="${GPUS[$worker_id]}"
+    run_worker "$worker_id" "$gpu_id" > "../../logs/progen2_small_base/clinical_zero_shot_subs_03_08/gpu_${gpu_id}.log" 2>&1 &
+done
 
-python ../../proteingym/baselines/progen2/compute_fitness.py \
-            --Progen2_model_name_or_path ${Progen2_model_name_or_path} \
-            --DMS_reference_file_path ${clinical_reference_file_path_subs} \
-            --DMS_data_folder ${clinical_data_folder_subs} \
-            --DMS_index $DMS_index \
-            --output_scores_folder ${output_scores_folder} \
+wait
+echo "All jobs finished."
+

@@ -164,7 +164,7 @@ def main():
     
     DMS_data['Progen2_score']=model_scores
     scoring_filename = args.output_scores_folder+os.sep+DMS_id+'.csv'
-    DMS_data[['mutant','Progen2_score','DMS_score']].to_csv(scoring_filename, index=False)
+    DMS_data[['mutated_sequence','Progen2_score','DMS_score']].to_csv(scoring_filename, index=False)
 
 if __name__ == '__main__':
     main()
