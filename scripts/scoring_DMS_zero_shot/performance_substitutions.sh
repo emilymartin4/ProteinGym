@@ -8,4 +8,4 @@ python ../../proteingym/performance_DMS_benchmarks.py \
 --output_performance_file_folder ${output_performance_file_folder} \
 --DMS_reference_file_path ${DMS_reference_file_path_subs} \
 --DMS_data_folder ${DMS_data_folder_subs} \
---performance_by_depth
+## --performance_by_depth

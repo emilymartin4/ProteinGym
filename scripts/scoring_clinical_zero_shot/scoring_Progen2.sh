@@ -7,10 +7,10 @@ source activate proteingym_env
 
 NUM_DATASETS=$(($(wc -l < $clinical_reference_file_path_subs) - 1))
 
-export Progen2_model_name_or_path="$HOME/ProteinGym/checkpoints/progen2-small"
-export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/small"
+export Progen2_model_name_or_path="$HOME/ProteinGym/checkpoints/progen2-base"
+export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/base"
 
-GPUS=(1 2 3 4 5)
+GPUS=(1 2)
 NUM_GPUS=${#GPUS[@]}
 
 run_worker() {
@@ -25,13 +25,14 @@ run_worker() {
             --DMS_reference_file_path "${clinical_reference_file_path_subs}" \
             --DMS_data_folder "${clinical_data_folder_subs}" \
             --DMS_index "$i" \
-            --output_scores_folder "${output_scores_folder}"
+            --output_scores_folder "${output_scores_folder}" \
+            --clinical
     done
 }
 
 for worker_id in "${!GPUS[@]}"; do
     gpu_id="${GPUS[$worker_id]}"
-    run_worker "$worker_id" "$gpu_id" > "../../logs/progen2_small_base/clinical_zero_shot_subs_03_08/gpu_${gpu_id}.log" 2>&1 &
+    run_worker "$worker_id" "$gpu_id" > "../../logs/progen2_base_base/clinical_zero_shot_substitutions/gpu_${gpu_id}.log" 2>&1 &
 done
 
 wait

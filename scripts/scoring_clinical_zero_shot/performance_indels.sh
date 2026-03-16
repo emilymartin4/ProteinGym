@@ -2,7 +2,7 @@
 
 source ../zero_shot_config.sh
 
-# export input_scoring_files_folder=../../data/clinical/indels # change to path of downloaded data
+export input_scoring_files_folder="../../../.cache/ProteinGym/zero_shot_clinical_indels_scores/Progen2/base"
 export output_performance_file_folder=../../benchmarks/clinical_zero_shot
 export clinical_reference_file_path=${clinical_reference_file_path_indels}
 

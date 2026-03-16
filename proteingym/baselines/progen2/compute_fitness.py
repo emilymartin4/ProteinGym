@@ -120,6 +120,7 @@ def main():
     parser.add_argument('--DMS_index', type=int, help='Path of DMS folder')
     parser.add_argument('--output_scores_folder', default=None, type=str, help='Name of folder to write model scores to')
     parser.add_argument('--indel_mode', action='store_true', help='Whether to score sequences with insertions and deletions')
+    parser.add_argument('--clinical', action='store_true', help='Whether we are running on clinical data (as opposed to DMS data)')
     parser.add_argument('--fp16', action='store_true', help='Whether to score sequences with half precision')
     parser.add_argument('--test', action='store_true', help='Test mode of fitness computation')
     args = parser.parse_args()
@@ -164,7 +165,16 @@ def main():
     
     DMS_data['Progen2_score']=model_scores
     scoring_filename = args.output_scores_folder+os.sep+DMS_id+'.csv'
-    DMS_data[['mutated_sequence','Progen2_score','DMS_score']].to_csv(scoring_filename, index=False)
+    if args.clinical:
+        if args.indel_mode:
+            DMS_data[['mutated_sequence','Progen2_score','DMS_score_bin']].to_csv(scoring_filename, index=False)
+        else:
+            DMS_data[['mutant','Progen2_score','DMS_bin_score']].to_csv(scoring_filename, index=False)
+    else:
+        if args.indel_mode:
+            DMS_data[['mutated_sequence','Progen2_score','DMS_score']].to_csv(scoring_filename, index=False)
+        else:
+            DMS_data[['mutant','Progen2_score','DMS_score']].to_csv(scoring_filename, index=False)
 
 if __name__ == '__main__':
     main()
