@@ -41,7 +41,8 @@ run_worker() {
             --DMS_data_folder "${clinical_data_folder_indels}" \
             --DMS_index "$i" \
             --output_scores_folder "${output_scores_folder}" \
-            --indel_mode
+            --indel_mode \
+            --clinical
     done
 }
 

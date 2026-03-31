@@ -42,7 +42,8 @@ run_worker() {
             --DMS_reference_file_path "${clinical_reference_file_path_subs}" \
             --DMS_data_folder "${clinical_data_folder_subs}" \
             --DMS_index "$i" \
-            --output_scores_folder "${output_scores_folder}"
+            --output_scores_folder "${output_scores_folder}" \
+            --clinical
     done
 }
 

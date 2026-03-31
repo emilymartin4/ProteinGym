@@ -72,111 +72,6 @@
             "directionality": 1,
             "key": "mutated_sequence",
             "model_type": "Single sequence"
-        },
-        "Progen2_large": {
-            "input_score_name": "Progen2_score",
-            "location": "Progen2/large",
-            "directionality": 1,
-            "key": "mutant",
-            "model_type": "Single sequence"
-        },
-        "Progen2_xlarge": {
-            "input_score_name": "Progen2_score",
-            "location": "Progen2/xlarge",
-            "directionality": 1,
-            "key": "mutant",
-            "model_type": "Single sequence"
-        },
-        "ProtGPT2": {
-            "input_score_name": "ProtGPT2_score",
-            "location": "ProtGPT2",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_S_no_retrieval": {
-            "input_score_name": "avg_score",
-            "location": "Tranception_no_retrieval/Tranception_S",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_M_no_retrieval": {
-            "input_score_name": "avg_score",
-            "location": "Tranception_no_retrieval/Tranception_M",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_L_no_retrieval": {
-            "input_score_name": "avg_score",
-            "location": "Tranception_no_retrieval/Tranception_L",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_S": {
-            "input_score_name": "avg_score",
-            "location": "Tranception/Tranception_S",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "Tranception_M": {
-            "input_score_name": "avg_score",
-            "location": "Tranception/Tranception_M",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "Tranception_L": {
-            "input_score_name": "avg_score",
-            "location": "Tranception/Tranception_L",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "TranceptEVE_S": {
-            "input_score_name": "avg_score",
-            "location": "TranceptEVE/TranceptEVE_S",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "TranceptEVE_M": {
-            "input_score_name": "avg_score",
-            "location": "TranceptEVE/TranceptEVE_M",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "TranceptEVE_L": {
-            "input_score_name": "avg_score",
-            "location": "TranceptEVE/TranceptEVE_L",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "HMM": {
-            "input_score_name": "logprob",
-            "location": "HMM",
-            "directionality": 1,
-            "key": "mutant",
-            "model_type": "MSA"
-        },
-        "Provean": {
-            "input_score_name": "Provean_score",
-            "location": "Provean",
-            "directionality": 1,
-            "key": "mutant",
-            "model_type": "MSA"
-        },
-        "PoET": {
-            "input_score_name": "PoET_score",
-            "location": "PoET",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
         }
     },
     "model_list_zero_shot_indels_clinical": {
@@ -201,100 +96,18 @@
             "key": "mutated_sequence",
             "model_type": "Single sequence"
         },
-        "Progen2_score": {
+        "Progen2_base": {
             "input_score_name": "Progen2_score",
             "location": "Progen2/base",
             "directionality": 1,
             "key": "mutated_sequence",
             "model_type": "Single sequence"
-        },
-        "Progen2_large": {
+        }
+    },
+    "model_list_zero_shot_indels_DMS": {
+    "Progen2_score": {
             "input_score_name": "Progen2_score",
-            "location": "Progen2/large",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Progen2_xlarge": {
-            "input_score_name": "Progen2_score",
-            "location": "Progen2/xlarge",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "ProtGPT2": {
-            "input_score_name": "ProtGPT2_score",
-            "location": "ProtGPT2",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Provean": {
-            "input_score_name": "provean_score",
-            "location": "Provean",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "RITA_s": {
-            "input_score_name": "RITA_score",
-            "location": "RITA/small",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "RITA_m": {
-            "input_score_name": "RITA_score",
-            "location": "RITA/medium",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "RITA_l": {
-            "input_score_name": "RITA_score",
-            "location": "RITA/large",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "RITA_xl": {
-            "input_score_name": "RITA_score",
-            "location": "RITA/xlarge",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_M_no_retrieval": {
-            "input_score_name": "avg_score",
-            "location": "Tranception_no_retrieval/Tranception_M",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_L_no_retrieval": {
-            "input_score_name": "avg_score",
-            "location": "Tranception_no_retrieval/Tranception_L",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "Single sequence"
-        },
-        "Tranception_M": {
-            "input_score_name": "avg_score",
-            "location": "Tranception/Tranception_M",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "Tranception_L": {
-            "input_score_name": "avg_score",
-            "location": "Tranception/Tranception_L",
-            "directionality": 1,
-            "key": "mutated_sequence",
-            "model_type": "MSA"
-        },
-        "Unirep": {
-            "input_score_name": "Unirep_score",
-            "location": "Unirep",
+            "location": "Progen2/base",
             "directionality": 1,
             "key": "mutated_sequence",
             "model_type": "Single sequence"
