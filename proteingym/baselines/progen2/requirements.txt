@@ -2,3 +2,5 @@
 torch==1.9.0+cu111
 transformers==4.16.2
 tokenizers==0.10.3
+scipy==1.10.1
+pandas==1.5.1

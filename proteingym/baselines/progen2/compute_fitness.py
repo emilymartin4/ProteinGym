@@ -17,16 +17,84 @@ from models.progen.modeling_progen import ProGenForCausalLM
 ########################################################################
 # model
 
+def resolve_checkpoint_path(ckpt):
+    ckpt = os.path.expanduser(ckpt)
+    if ckpt.startswith("=") and os.path.isdir(ckpt[1:]):
+        raise ValueError(
+            f"Invalid ProGen2 checkpoint path: {ckpt}. "
+            "The path starts with '='; check the shell assignment for Progen2_model_name_or_path."
+        )
+
+    if os.path.sep in ckpt or ckpt.startswith("."):
+        config_path = os.path.join(ckpt, "config.json")
+        if not os.path.isfile(config_path):
+            raise FileNotFoundError(
+                f"Expected a local ProGen2 checkpoint directory at {ckpt}, "
+                f"but {config_path} was not found."
+            )
+    return ckpt
+
+def load_checkpoint_state_dict(ckpt):
+    weights_path = os.path.join(ckpt, "pytorch_model.bin")
+    config_path = os.path.join(ckpt, "config.json")
+
+    if not os.path.isfile(weights_path):
+        raise FileNotFoundError(f"Expected ProGen2 weights at {weights_path}")
+
+    state_dict = torch.load(weights_path, map_location="cpu")
+    config = json.load(open(config_path, "r"))
+    expected_vocab_size = int(config["vocab_size"])
+
+    lm_head_weight = state_dict.get("lm_head.weight")
+    lm_head_bias = state_dict.get("lm_head.bias")
+    if lm_head_weight is not None and lm_head_weight.shape[0] != expected_vocab_size:
+        actual_vocab_size = lm_head_weight.shape[0]
+        if actual_vocab_size < expected_vocab_size:
+            raise RuntimeError(
+                f"Checkpoint lm_head has vocab size {actual_vocab_size}, "
+                f"but config.json expects {expected_vocab_size}."
+            )
+
+        print(
+            "Checkpoint lm_head is larger than config vocab size "
+            f"({actual_vocab_size} vs {expected_vocab_size}); "
+            "trimming extra output rows for scoring."
+        )
+        state_dict["lm_head.weight"] = lm_head_weight[:expected_vocab_size, :]
+        if lm_head_bias is not None:
+            state_dict["lm_head.bias"] = lm_head_bias[:expected_vocab_size]
+
+    return state_dict
+
 def create_model(ckpt, fp16):
+    state_dict = load_checkpoint_state_dict(ckpt) if os.path.isdir(ckpt) else None
     if fp16:
-        return ProGenForCausalLM.from_pretrained(ckpt, revision='float16', torch_dtype=torch.float16, low_cpu_mem_usage=True)
+        return ProGenForCausalLM.from_pretrained(
+            ckpt,
+            revision='float16',
+            torch_dtype=torch.float16,
+            low_cpu_mem_usage=True,
+            state_dict=state_dict,
+        )
     else:
-        return ProGenForCausalLM.from_pretrained(ckpt)
+        return ProGenForCausalLM.from_pretrained(ckpt, state_dict=state_dict)
 
 
 def create_tokenizer_custom(file):
     with open(file, 'r') as f:
-        return Tokenizer.from_str(f.read())
+        tok = Tokenizer.from_str(f.read())
+    tok.no_padding()
+    tok.no_truncation()
+    return tok
+    
+
+def resolve_tokenizer_path(ckpt):
+    checkpoint_tokenizer_path = os.path.join(ckpt, "tokenizer.json")
+    if os.path.isfile(checkpoint_tokenizer_path):
+        return checkpoint_tokenizer_path
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(dir_path, 'tokenizer.json')
 
 ########################################################################
 # fitness
@@ -124,18 +192,19 @@ def main():
     parser.add_argument('--test', action='store_true', help='Test mode of fitness computation')
     args = parser.parse_args()
 
-    model = create_model(ckpt=args.Progen2_model_name_or_path, fp16=args.fp16).cuda()
-    config = json.load(open(args.Progen2_model_name_or_path+os.sep+'config.json',"r"))
+    checkpoint_path = resolve_checkpoint_path(args.Progen2_model_name_or_path)
+
+    model = create_model(ckpt=checkpoint_path, fp16=args.fp16).cuda()
+    config = json.load(open(checkpoint_path+os.sep+'config.json',"r"))
     print("Maximum context length: {}".format(config['n_positions']))
-    
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    tokenizer_path = os.path.join(dir_path, 'tokenizer.json')
+
+    tokenizer_path = resolve_tokenizer_path(checkpoint_path)
     tokenizer = create_tokenizer_custom(file=tokenizer_path)
 
     mapping_protein_seq_DMS = pd.read_csv(args.DMS_reference_file_path)
     list_DMS = mapping_protein_seq_DMS["DMS_id"]
     DMS_id=list_DMS[args.DMS_index]
-    print("Computing scores for: {} with Progen2: {}".format(DMS_id, args.Progen2_model_name_or_path))
+    print("Computing scores for: {} with Progen2: {}".format(DMS_id, checkpoint_path))
     DMS_file_name = mapping_protein_seq_DMS["DMS_filename"][mapping_protein_seq_DMS["DMS_id"]==DMS_id].values[0]
     target_seq = mapping_protein_seq_DMS["target_seq"][mapping_protein_seq_DMS["DMS_id"]==DMS_id].values[0].upper()
     
@@ -147,7 +216,7 @@ def main():
         x_uniref90bfd30 = '2GFLPFRGADEGLAAREAATLAARGTAARAYREDSWAVPVPRGLLGDLTARVAALGAASPPPADPLAVTLDLHHVTAEVALTTVLDAATLVHGQTRVLSAEDAAEAATAAAAATEAYLERLQDFVLFMSASVRVWRRGNAAGATGPEWDQWYTVADRDALGSAPTHLAVLGRQADALCHFVLDRVAWGTCGTPLWSGDEDLGNVVATFAGYADRLATAPRDLIM1'
         x_oas = '1EVQLVESGGGLVQPGGSLRLSCAASGFTFSSYAMHWVRQAPWKGLEYVSAISSNGGSTYYANSVKGRFTISRDNSKNTLYLQMGSLRAEDMAVYYCARDESGYSYGWGYYFDYWGQGTLVTVSS2'
         x_bfd90 = '1TAPRSTRASGSEGSRPPGIPAKGRRCLPSRAGSVTPRFRHARQGTATVAKEQGRKLIASNRKARHDYHIEDTFEAGLVLTGTEVKSLRMGRASLIDGYAVFYGEELWLEGVHIPEYLNGNWTNHTPRRRRKLLLNRSELTKLAHKTSESGHTIVPLALYFKDGRAKVEIAVAKGKKAYDKRHALRERQDQREV2'
-        model_size = args.Progen2_model_name_or_path.split('/')[-1]
+        model_size = checkpoint_path.split('/')[-1]
         print("Model: {}".format(model_size))
         checkpoint_x_ll = {
                 'progen2-small': (x_uniref90bfd30, -2.4),
@@ -164,7 +233,11 @@ def main():
     
     DMS_data['Progen2_score']=model_scores
     scoring_filename = args.output_scores_folder+os.sep+DMS_id+'.csv'
-    DMS_data[['mutated_sequence','Progen2_score','DMS_score']].to_csv(scoring_filename, index=False)
+    output_columns = [
+        column for column in ['mutant', 'mutated_sequence', 'Progen2_score', 'DMS_score', 'DMS_score_bin', 'DMS_bin_score']
+        if column in DMS_data.columns
+    ]
+    DMS_data[output_columns].to_csv(scoring_filename, index=False)
 
 if __name__ == '__main__':
     main()
