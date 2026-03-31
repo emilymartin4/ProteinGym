@@ -81,6 +81,15 @@ def standardization(x):
     """Assumes input is numpy array or pandas series"""
     return (x - x.mean()) / x.std()
 
+
+def parse_models_arg(models_arg):
+    if not models_arg:
+        return None
+    models = []
+    for item in models_arg:
+        models.extend(model.strip() for model in item.split(",") if model.strip())
+    return models or None
+
 def compute_bootstrap_standard_error(df, number_assay_reshuffle=10000):
     """
     Computes the non-parametric bootstrap standard error for the mean estimate of a given performance metric (eg., Spearman, AUC) across DMS assays (ie., the sample standard deviation of the mean across bootstrap samples)
@@ -122,6 +131,8 @@ def main():
     parser.add_argument('--indel_mode', action='store_true', help='Whether to score sequences with insertions and deletions')
     parser.add_argument('--performance_by_depth', action='store_true', help='Whether to compute performance by mutation depth')
     parser.add_argument('--config_file', default=f'{os.path.dirname(proteingym_folder_path)}/config.json', type=str, help='Path to config file containing model information')
+    parser.add_argument('--models', nargs='+', default=None,
+                        help='Optional subset of model names to benchmark. Accepts space-separated and/or comma-separated model names.')
     args = parser.parse_args()
     
     mapping_protein_seq_DMS = pd.read_csv(args.DMS_reference_file_path)
@@ -142,7 +153,22 @@ def main():
     if args.indel_mode:
         args.performance_by_depth = False
 
-    score_variables = list(config["model_list_zero_shot_substitutions_DMS"].keys()) if not args.indel_mode else list(config["model_list_zero_shot_indels_DMS"].keys())
+    model_config = config["model_list_zero_shot_substitutions_DMS"] if not args.indel_mode else config["model_list_zero_shot_indels_DMS"]
+    available_models = list(model_config.keys())
+    selected_models = parse_models_arg(args.models)
+    if selected_models is None:
+        score_variables = available_models
+    else:
+        unknown_models = [model for model in selected_models if model not in model_config]
+        if unknown_models:
+            raise ValueError(
+                "Unknown model(s): {}. Available models include: {}".format(
+                    ", ".join(unknown_models),
+                    ", ".join(available_models),
+                )
+            )
+        score_variables = selected_models
+
     if not os.path.isdir(args.output_performance_file_folder):
         os.mkdir(args.output_performance_file_folder)
     for metric in ['Spearman','AUC','MCC',"NDCG","Top_recall"]:
@@ -151,7 +177,7 @@ def main():
     
     model_types={}
     for model in score_variables:
-        model_types[model]=config["model_list_zero_shot_substitutions_DMS"][model]["model_type"] if not args.indel_mode else config["model_list_zero_shot_indels_DMS"][model]["model_type"]
+        model_types[model] = model_config[model]["model_type"]
     model_types=pd.DataFrame.from_dict(model_types,columns=['Model type'],orient='index')
     model_details=pd.DataFrame.from_dict(constants["model_details"],columns=['Model details'],orient='index')
     model_references=pd.DataFrame.from_dict(constants["model_references"],columns=['References'],orient='index')
