@@ -7,7 +7,7 @@
 # If so, you can set `PROTEINGYM_CACHE` here 
 # to the same as `proteingym.utils.download.PROTEINGYM_CACHE`
 # By default, this will be: "$HOME/.cache/ProteinGym"    
-export PROTEINGYM_CACHE="$HOME/.cache/ProteinGym"    
+export PROTEINGYM_CACHE="/network/scratch/n/noah.elrimawi-fine/ProteinGym"    
 
 # ---- DMS zero-shot parameters ---- #
 

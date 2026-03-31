@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source ../zero_shot_config.sh
-source activate proteingym_env
 
 export mutation_type='substitutions'
 

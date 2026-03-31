@@ -11,6 +11,15 @@ def standardization(x):
     return (x - x.mean()) / x.std()
 
 
+def parse_models_arg(models_arg):
+    if not models_arg:
+        return None
+    models = []
+    for item in models_arg:
+        models.extend(model.strip() for model in item.split(",") if model.strip())
+    return models or None
+
+
 proteingym_folder_path = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -30,6 +39,8 @@ def main():
                         type=str, help='Path to reference file containing DMS assay information')
     parser.add_argument('--config_file', default=f'{os.path.dirname(proteingym_folder_path)}/config.json',
                         type=str, help='Path to config file containing model information')
+    parser.add_argument('--models', nargs='+', default=None,
+                        help='Optional subset of model names to merge. Accepts space-separated and/or comma-separated model names.')
     args = parser.parse_args()
 
     reference_file = pd.read_csv(args.DMS_reference_file)
@@ -42,7 +53,21 @@ def main():
     elif args.dataset == "clinical":
         reference_field = "model_list_zero_shot_substitutions_clinical" if args.mutation_type == "substitutions" else "model_list_zero_shot_indels_clinical"
 
-    list_models = config[reference_field].keys()
+    available_models = list(config[reference_field].keys())
+    selected_models = parse_models_arg(args.models)
+    if selected_models is None:
+        list_models = available_models
+    else:
+        unknown_models = [model for model in selected_models if model not in config[reference_field]]
+        if unknown_models:
+            raise ValueError(
+                "Unknown model(s): {}. Available models include: {}".format(
+                    ", ".join(unknown_models),
+                    ", ".join(available_models),
+                )
+            )
+        list_models = selected_models
+
     pbar = tqdm(enumerate(list_DMS), total=len(list_DMS))
     for DMS_index, DMS_id in pbar:
         target_seq = reference_file["target_seq"][reference_file["DMS_id"]
@@ -69,9 +94,19 @@ def main():
             input_score_name = config[reference_field][model]["input_score_name"]
             # Mutant merge key depends on the model for subs
             DMS_mutant_column = mutant_merge_key if args.mutation_type == "substitutions" else "mutated_sequence"
-            
-            score_files[model] = pd.read_csv(os.path.join(
-                args.model_scores_location, config[reference_field][model]["location"], DMS_id+".csv"))
+
+            score_file_path = os.path.join(
+                args.model_scores_location,
+                config[reference_field][model]["location"],
+                DMS_id + ".csv",
+            )
+            if not os.path.exists(score_file_path):
+                print("Warning: Missing score file for {} and model {} at {}. Skipping.".format(
+                    DMS_id, model, score_file_path
+                ))
+                continue
+
+            score_files[model] = pd.read_csv(score_file_path)
             if "sequence" in score_files[model]:
                 score_files[model]["mutated_sequence"] = score_files[model]["sequence"]
             score_files[model][model] = config[reference_field][model]["directionality"] * \
@@ -107,9 +142,10 @@ def main():
         num_mutants_expected = reference_file[reference_file["DMS_id"] == DMS_id]["DMS_total_number_mutants"].values[0]
         if len(all_model_scores) != num_mutants_expected:
             print(f"Warning: Insufficient mutants for {DMS_id}: {len(all_model_scores)}, expected {num_mutants_expected}. Original DMS file length: {orig_DMS_length}")
-        if not os.path.isdir(os.path.join(args.model_scores_location, args.merged_scores_dir)):
-            os.mkdir(os.path.join(
-                args.model_scores_location, args.merged_scores_dir))
+        os.makedirs(
+            os.path.join(args.model_scores_location, args.merged_scores_dir),
+            exist_ok=True,
+        )
         all_model_scores.to_csv(os.path.join(
             args.model_scores_location, args.merged_scores_dir, f"{DMS_id}.csv"), index=False)
         print("Length merged file: {}".format(len(all_model_scores)))

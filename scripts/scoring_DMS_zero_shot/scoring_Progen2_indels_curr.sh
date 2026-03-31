@@ -4,16 +4,14 @@ set -euo pipefail
 
 source ../zero_shot_config.sh
 
-NUM_DATASETS=$(($(wc -l < $clinical_reference_file_path_subs) - 1))
+NUM_DATASETS=$(($(wc -l < $DMS_reference_file_path_indels) - 1))
 
-export Progen2_model_name_or_path="/network/scratch/n/noah.elrimawi-fine/Progen/oldProgen/checkpoints/progen2-base"
-output_tag="${PROGEN2_OUTPUT_TAG:-base}"
-export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/${output_tag}"
+export Progen2_model_name_or_path="/home/mila/n/noah.elrimawi-fine/projects/progen/progen2/progen_swissprot_final"
+export output_scores_folder="${DMS_output_score_folder_indels}/Progen2/curriculum"
 run_timestamp=$(date +"%Y_%m_%d_%H_%M_%S")
-export log_folder="../../logs/progen2_base/clinical_zero_shot_subs_${run_timestamp}"
+export log_folder="../../logs/progen2_curriculum/DMS_zero_shot_indels_${run_timestamp}"
 
 mkdir -p "${output_scores_folder}" "${log_folder}"
-echo "Writing scores to ${output_scores_folder}"
 
 if [[ -n "${CUDA_VISIBLE_DEVICES:-}" ]]; then
     IFS=',' read -r -a GPUS <<< "${CUDA_VISIBLE_DEVICES}"
@@ -35,14 +33,15 @@ run_worker() {
     local gpu_id=$2
 
     for ((i=worker_id; i<NUM_DATASETS; i+=NUM_GPUS)); do
-        echo "[GPU ${gpu_id}] Running clinical index $i"
+        echo "[GPU ${gpu_id}] Running DMS index $i"
 
         CUDA_VISIBLE_DEVICES=${gpu_id} python ../../proteingym/baselines/progen2/compute_fitness.py \
             --Progen2_model_name_or_path "${Progen2_model_name_or_path}" \
-            --DMS_reference_file_path "${clinical_reference_file_path_subs}" \
-            --DMS_data_folder "${clinical_data_folder_subs}" \
+            --DMS_reference_file_path "${DMS_reference_file_path_indels}" \
+            --DMS_data_folder "${DMS_data_folder_indels}" \
             --DMS_index "$i" \
-            --output_scores_folder "${output_scores_folder}"
+            --output_scores_folder "${output_scores_folder}" \
+            --indel_mode
     done
 }
 

@@ -6,11 +6,11 @@ source ../zero_shot_config.sh
 
 NUM_DATASETS=$(($(wc -l < $clinical_reference_file_path_subs) - 1))
 
-export Progen2_model_name_or_path="/network/scratch/n/noah.elrimawi-fine/Progen/oldProgen/checkpoints/progen2-base"
-output_tag="${PROGEN2_OUTPUT_TAG:-base}"
+export Progen2_model_name_or_path="/network/scratch/n/noah.elrimawi-fine/Progen/results_swissprot_0329-2326/checkpoint-13000"
+output_tag="${PROGEN2_OUTPUT_TAG:-curriculum}"
 export output_scores_folder="${clinical_output_score_folder_subs}/Progen2/${output_tag}"
 run_timestamp=$(date +"%Y_%m_%d_%H_%M_%S")
-export log_folder="../../logs/progen2_base/clinical_zero_shot_subs_${run_timestamp}"
+export log_folder="../../logs/progen2_curriculum/clinical_zero_shot_subs_${run_timestamp}"
 
 mkdir -p "${output_scores_folder}" "${log_folder}"
 echo "Writing scores to ${output_scores_folder}"

@@ -3,14 +3,29 @@
 set -euo pipefail
 
 source ../zero_shot_config.sh
-source activate proteingym_env
 
 NUM_DATASETS=$(($(wc -l < $clinical_reference_file_path_indels) - 1))
 
-export Progen2_model_name_or_path="$HOME/ProteinGym/checkpoints/progen2-base"
+export Progen2_model_name_or_path="/network/scratch/n/noah.elrimawi-fine/Progen/oldProgen/checkpoints/progen2-base"
 export output_scores_folder="${clinical_output_score_folder_indels}/Progen2/base"
+run_timestamp=$(date +"%Y_%m_%d_%H_%M_%S")
+export log_folder="../../logs/progen2_base/clinical_zero_shot_indels_${run_timestamp}"
 
-GPUS=(1)
+mkdir -p "${output_scores_folder}" "${log_folder}"
+
+if [[ -n "${CUDA_VISIBLE_DEVICES:-}" ]]; then
+    IFS=',' read -r -a GPUS <<< "${CUDA_VISIBLE_DEVICES}"
+elif command -v nvidia-smi >/dev/null 2>&1; then
+    mapfile -t GPUS < <(nvidia-smi --query-gpu=index --format=csv,noheader)
+else
+    GPUS=(0)
+fi
+
+if (( ${#GPUS[@]} == 0 )); then
+    echo "No GPUs available." >&2
+    exit 1
+fi
+
 NUM_GPUS=${#GPUS[@]}
 
 run_worker() {
@@ -26,16 +41,15 @@ run_worker() {
             --DMS_data_folder "${clinical_data_folder_indels}" \
             --DMS_index "$i" \
             --output_scores_folder "${output_scores_folder}" \
-            --indel_mode \
-            --clinical
+            --indel_mode
     done
 }
 
 for worker_id in "${!GPUS[@]}"; do
     gpu_id="${GPUS[$worker_id]}"
-    run_worker "$worker_id" "$gpu_id" > "../../logs/progen2_base_base/clinical_zero_shot_indels/gpu_${gpu_id}.log" 2>&1 &
+    run_worker "$worker_id" "$gpu_id" > "${log_folder}/gpu_${gpu_id}.log" 2>&1 &
 done
 
 wait
+echo "Logs written to ${log_folder}"
 echo "All jobs finished."
-

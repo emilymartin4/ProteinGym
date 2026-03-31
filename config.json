@@ -1,6 +1,6 @@
 {
     "PG_data_location": "~/.cache/proteingym",
-    "model_list_zero_shot_substitutions_DMS": {
+    "model_list_zero_shot_substitutions_DMS": { 
         "Progen2_base": {
             "input_score_name": "Progen2_score",
             "location": "Progen2/base",
@@ -9,31 +9,632 @@
             "model_type": "Single sequence"
         }
     },
-    "model_list_zero_shot_substitutions_clinical": {
-    "Progen2_score": {
-            "input_score_name": "Progen2_score",
-            "location": "Progen2/base",
+    "model_list_zero_shot_indels_DMS": {
+        "Unirep": {
+            "input_score_name": "Unirep_score",
+            "location": "UniRep",
+            "directionality": -1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Wavenet": {
+            "input_score_name": "Wavenet_prediction",
+            "location": "Wavenet",
+            "directionality": -1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "RITA_s": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/small",
             "directionality": 1,
             "key": "mutant",
             "model_type": "Single sequence"
+        },
+        "RITA_m": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/medium",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "RITA_l": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/large",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "RITA_xl": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/xlarge",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "Progen2_small": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/small",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "Progen2_medium": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/medium",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "Progen2_score": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/base",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Progen2_large": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/large",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "Progen2_xlarge": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/xlarge",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "ProtGPT2": {
+            "input_score_name": "ProtGPT2_score",
+            "location": "ProtGPT2",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_S_no_retrieval": {
+            "input_score_name": "avg_score",
+            "location": "Tranception_no_retrieval/Tranception_S",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_M_no_retrieval": {
+            "input_score_name": "avg_score",
+            "location": "Tranception_no_retrieval/Tranception_M",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_L_no_retrieval": {
+            "input_score_name": "avg_score",
+            "location": "Tranception_no_retrieval/Tranception_L",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_S": {
+            "input_score_name": "avg_score",
+            "location": "Tranception/Tranception_S",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "Tranception_M": {
+            "input_score_name": "avg_score",
+            "location": "Tranception/Tranception_M",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "Tranception_L": {
+            "input_score_name": "avg_score",
+            "location": "Tranception/Tranception_L",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "TranceptEVE_S": {
+            "input_score_name": "avg_score",
+            "location": "TranceptEVE/TranceptEVE_S",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "TranceptEVE_M": {
+            "input_score_name": "avg_score",
+            "location": "TranceptEVE/TranceptEVE_M",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "TranceptEVE_L": {
+            "input_score_name": "avg_score",
+            "location": "TranceptEVE/TranceptEVE_L",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "HMM": {
+            "input_score_name": "logprob",
+            "location": "HMM",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "MSA"
+        },
+        "Provean": {
+            "input_score_name": "Provean_score",
+            "location": "Provean",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "MSA"
+        },
+        "PoET": {
+            "input_score_name": "PoET_score",
+            "location": "PoET",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
         }
     },
     "model_list_zero_shot_indels_clinical": {
-    "Progen2_score": {
+        "HMM": {
+            "input_score_name": "logprob",
+            "location": "HMM",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "Progen2_small": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/small",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Progen2_medium": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/medium",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Progen2_score": {
             "input_score_name": "Progen2_score",
             "location": "Progen2/base",
             "directionality": 1,
             "key": "mutated_sequence",
             "model_type": "Single sequence"
+        },
+        "Progen2_large": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/large",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Progen2_xlarge": {
+            "input_score_name": "Progen2_score",
+            "location": "Progen2/xlarge",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "ProtGPT2": {
+            "input_score_name": "ProtGPT2_score",
+            "location": "ProtGPT2",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Provean": {
+            "input_score_name": "provean_score",
+            "location": "Provean",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "RITA_s": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/small",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "RITA_m": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/medium",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "RITA_l": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/large",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "RITA_xl": {
+            "input_score_name": "RITA_score",
+            "location": "RITA/xlarge",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_M_no_retrieval": {
+            "input_score_name": "avg_score",
+            "location": "Tranception_no_retrieval/Tranception_M",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_L_no_retrieval": {
+            "input_score_name": "avg_score",
+            "location": "Tranception_no_retrieval/Tranception_L",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "Tranception_M": {
+            "input_score_name": "avg_score",
+            "location": "Tranception/Tranception_M",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "Tranception_L": {
+            "input_score_name": "avg_score",
+            "location": "Tranception/Tranception_L",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "Unirep": {
+            "input_score_name": "Unirep_score",
+            "location": "Unirep",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "Single sequence"
+        },
+        "PoET": {
+            "input_score_name": "PoET_score",
+            "location": "PoET",
+            "directionality": 1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
         }
     },
-    "model_list_zero_shot_indels_DMS": {
-    "Progen2_score": {
+    "model_list_zero_shot_substitutions_clinical": {
+        "LRT": {
+            "input_score_name": "LRT_score",
+            "location": "LRT",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "LIST-S2": {
+            "input_score_name": "LIST-S2_score",
+            "location": "LIST-S2",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "PrimateAI": {
+            "input_score_name": "PrimateAI_score",
+            "location": "PrimateAI",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "MutPred": {
+            "input_score_name": "MutPred_score",
+            "location": "MutPred",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "Progen2_score": {
             "input_score_name": "Progen2_score",
             "location": "Progen2/base",
             "directionality": 1,
             "key": "mutated_sequence",
             "model_type": "Single sequence"
+        },
+        "MutationAssessor": {
+            "input_score_name": "MutationAssessor_score",
+            "location": "MutationAssessor",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "SIFT4G": {
+            "input_score_name": "SIFT4G_score",
+            "location": "SIFT4G",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "SIFT": {
+            "input_score_name": "SIFT_score",
+            "location": "SIFT",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "Provean": {
+            "input_score_name": "PROVEAN_score",
+            "location": "PROVEAN",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "TranceptEVE_L": {
+            "input_score_name": "avg_score",
+            "location": "TranceptEVE/TranceptEVE_L",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "MSA"
+        },
+        "GEMME": {
+            "input_score_name": "GEMME_score",
+            "location": "GEMME",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "MSA"
+        },
+        "EVE": {
+            "input_score_name": "EVE_evol_index",
+            "location": "EVE",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "MSA"
+        },
+        "ESM1b": {
+            "input_score_name": "esm1b_t33_650M_UR50S",
+            "location": "ESM1b",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Single sequence"
+        },
+        "PoET": {
+            "input_score_name": "PoET_score",
+            "location": "PoET",
+            "directionality": -1,
+            "key": "mutated_sequence",
+            "model_type": "MSA"
+        },
+        "SiteRM": {
+            "input_score_name": "SiteRM_score",
+            "location": "SiteRM",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "MSA"
+        }
+    },
+    "model_list_supervised_substitutions_clinical": {
+        "ClinPred": {
+            "input_score_name": "ClinPred_score",
+            "location": "ClinPred",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "DANN": {
+            "input_score_name": "DANN_score",
+            "location": "DANN",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "MutationTaster": {
+            "input_score_name": "MutationTaster_converted_rankscore",
+            "location": "MutationTaster",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "CADD": {
+            "input_score_name": "CADD_phred",
+            "location": "CADD",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "FATHMM": {
+            "input_score_name": "FATHMM_score",
+            "location": "FATHMM",
+            "directionality": -1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "PolyPhen2 (HDIV)": {
+            "input_score_name": "Polyphen2_HDIV_score",
+            "location": "Polyphen2_HDIV",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "MPC": {
+            "input_score_name": "MPC_score",
+            "location": "MPC",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "DEOGEN2": {
+            "input_score_name": "DEOGEN2_score",
+            "location": "DEOGEN2",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "PolyPhen2 (HVAR)": {
+            "input_score_name": "Polyphen2_HVAR_score",
+            "location": "Polyphen2_HVAR",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "gMVP": {
+            "input_score_name": "gMVP_score",
+            "location": "gMVP",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "VARITY (R)": {
+            "input_score_name": "VARITY_R_LOO_score",
+            "location": "VARITY_R_LOO",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "VARITY (ER)": {
+            "input_score_name": "VARITY_ER_LOO_score",
+            "location": "VARITY_ER_LOO",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "BayesDel (addAF)": {
+            "input_score_name": "BayesDel_addAF_score",
+            "location": "BayesDel_addAF",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "BayesDel (noAF)": {
+            "input_score_name": "BayesDel_noAF_score",
+            "location": "BayesDel_noAF",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "REVEL": {
+            "input_score_name": "REVEL_score",
+            "location": "REVEL",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "VEST4": {
+            "input_score_name": "VEST4_score",
+            "location": "VEST4",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        },
+        "MetaRNN": {
+            "input_score_name": "MetaRNN_score",
+            "location": "MetaRNN",
+            "directionality": 1,
+            "key": "mutant",
+            "model_type": "Clinical Predictor"
+        }
+    },
+    "model_list_supervised_substitutions_DMS": {
+        "OHE - Not augmented": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "OHE_not_augmented",
+            "key": "mutated_sequence",
+            "model_type": "One-hot Encoding"
+        },
+        "OHE - Augmented - DeepSequence": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "OHE_DeepSequence",
+            "key": "mutated_sequence",
+            "model_type": "One-hot Encoding"
+        },
+        "OHE - Augmented - ESM1v": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "OHE_ESM1v",
+            "key": "mutated_sequence",
+            "model_type": "One-hot Encoding"
+        },
+        "OHE - Augmented - MSA Transformer": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "OHE_MSAT",
+            "key": "mutated_sequence",
+            "model_type": "One-hot Encoding"
+        },
+        "OHE - Augmented - Tranception": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "OHE_Tranception",
+            "key": "mutated_sequence",
+            "model_type": "One-hot Encoding"
+        },
+        "OHE - Augmented - TranceptEVE": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "OHE_TranceptEVE",
+            "key": "mutated_sequence",
+            "model_type": "One-hot Encoding"
+        },
+        "Embeddings - Augmented - ESM1v": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "ESM1v",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
+        },
+        "Embeddings - Augmented - MSA Transformer": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "MSA_Transformer",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
+        },
+        "Embeddings - Augmented - Tranception": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "Tranception",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
+        },
+        "ProteinNPT": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "ProteinNPT",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
+        },
+        "Kermut": {
+            "input_score_name": "y_pred",
+            "label_name": "y",
+            "location": "kermut",
+            "key": "mutant",
+            "model_type": "Structure & sequence embedding"
+        }
+    },
+    "model_list_supervised_indels_DMS": {
+        "Embeddings_ESM1v_indels": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "ESM1v",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
+        },
+        "Embeddings_MSA_Transformer_indels": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "MSA_Transformer",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
+        },
+        "Embeddings_Tranception_indels": {
+            "input_score_name": "predictions_fitness",
+            "label_name": "labels_fitness",
+            "location": "Tranception",
+            "key": "mutated_sequence",
+            "model_type": "Sequence Embedding"
         }
     }
 }
