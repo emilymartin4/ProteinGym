@@ -188,7 +188,6 @@ def main():
     parser.add_argument('--DMS_index', type=int, help='Path of DMS folder')
     parser.add_argument('--output_scores_folder', default=None, type=str, help='Name of folder to write model scores to')
     parser.add_argument('--indel_mode', action='store_true', help='Whether to score sequences with insertions and deletions')
-    parser.add_argument('--clinical', action='store_true', help='Whether we are running on clinical data (as opposed to DMS data)')
     parser.add_argument('--fp16', action='store_true', help='Whether to score sequences with half precision')
     parser.add_argument('--test', action='store_true', help='Test mode of fitness computation')
     args = parser.parse_args()
